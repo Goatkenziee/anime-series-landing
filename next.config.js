@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // No Pages Router config needed — using App Router
+  // App Router only
 };
 
 module.exports = nextConfig;

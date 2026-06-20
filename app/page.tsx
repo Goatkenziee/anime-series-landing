@@ -1,22 +1,17 @@
-import ParticleBackground from "@/components/ParticleBackground";
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import SynopsisSection from "@/components/SynopsisSection";
-import CharactersSection from "@/components/CharactersSection";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import Footer from "@/components/Footer";
+import { AnimeHero } from "@/components/anime-hero";
+import { AnimeCharacters } from "@/components/anime-characters";
+import { AnimeTransformations } from "@/components/anime-transformations";
+import { AnimeEpisodes } from "@/components/anime-episodes";
+import { AnimeFooter } from "@/components/anime-footer";
 
-export default function HomePage() {
+export default function Home() {
   return (
-    <ErrorBoundary>
-      <main className="relative min-h-screen bg-[#0a0a1a] text-white overflow-x-hidden">
-        <ParticleBackground />
-        <Navbar />
-        <HeroSection />
-        <SynopsisSection />
-        <CharactersSection />
-        <Footer />
-      </main>
-    </ErrorBoundary>
+    <main className="relative min-h-screen">
+      <AnimeHero />
+      <AnimeCharacters />
+      <AnimeTransformations />
+      <AnimeEpisodes />
+      <AnimeFooter />
+    </main>
   );
 }

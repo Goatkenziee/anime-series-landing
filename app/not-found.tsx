@@ -4,7 +4,6 @@ export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 text-center">
       <div className="relative">
-        {/* Glow effect */}
         <div className="absolute -inset-20 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-3xl" />
         <div className="relative">
           <h1 className="text-8xl font-bold tracking-tighter sm:text-9xl">

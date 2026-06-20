@@ -61,14 +61,9 @@ export function AnimeHero() {
 
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
-      {/* Particle canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
-
-      {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-black z-[1]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600/10 via-transparent to-transparent z-[1]" />
-
-      {/* Content */}
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -98,8 +93,6 @@ export function AnimeHero() {
           </div>
         </motion.div>
       </div>
-
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -64,7 +64,6 @@ export function AnimeCharacters() {
               whileHover={{ y: -8, scale: 1.02 }}
             >
               <Card className="group relative overflow-hidden border-0 bg-gradient-to-b from-gray-900 to-black p-6 transition-all hover:shadow-2xl">
-                {/* Glow effect */}
                 <div className={`absolute -inset-2 rounded-xl bg-gradient-to-r ${char.color} opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-30`} />
                 <div className="relative">
                   <div className={`mb-4 h-24 w-24 rounded-full bg-gradient-to-br ${char.color} p-[2px]`}>

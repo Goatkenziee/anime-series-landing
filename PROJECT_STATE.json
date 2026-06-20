@@ -1,0 +1,33 @@
+{
+  "updatedAt": "2026-06-20T07:09:11.961Z",
+  "framework": "Next.js",
+  "dbModels": [],
+  "apiRoutes": [],
+  "pages": [
+    "app/page.tsx"
+  ],
+  "components": [
+    "app/layout.tsx",
+    "components/CharactersSection.tsx",
+    "components/HeroSection.tsx",
+    "components/Navbar.tsx",
+    "components/ParticleBackground.tsx",
+    "components/SynopsisSection.tsx"
+  ],
+  "dependencies": [
+    "@types/node",
+    "@types/react",
+    "@types/react-dom",
+    "autoprefixer",
+    "clsx",
+    "framer-motion",
+    "next",
+    "postcss",
+    "react",
+    "react-dom",
+    "tailwind-merge",
+    "tailwindcss",
+    "typescript"
+  ],
+  "fileCount": 16
+}

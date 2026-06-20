@@ -2,23 +2,28 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="relative min-h-screen bg-[#0a0a1a] text-white flex items-center justify-center">
-      <div className="text-center z-10 px-4">
-        <h1 className="text-8xl font-bold gradient-text mb-4">404</h1>
-        <h2 className="text-2xl font-semibold mb-6">
-          Dimension Not Found
-        </h2>
-        <p className="text-gray-400 mb-8 max-w-md mx-auto">
-          This portal leads to an unknown dimension. The Shadow Realm awaits your
-          return.
-        </p>
-        <Link
-          href="/"
-          className="inline-block px-8 py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300"
-        >
-          Return Home
-        </Link>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 text-center">
+      <div className="relative">
+        {/* Glow effect */}
+        <div className="absolute -inset-20 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-3xl" />
+        <div className="relative">
+          <h1 className="text-8xl font-bold tracking-tighter sm:text-9xl">
+            <span className="gradient-text">404</span>
+          </h1>
+          <p className="mt-4 text-xl text-gray-400 sm:text-2xl">
+            This page has vanished into the void...
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            The dimension you&apos;re looking for doesn&apos;t exist in this universe.
+          </p>
+          <Link
+            href="/"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 text-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-600/30"
+          >
+            Return to Home
+          </Link>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -3,7 +3,7 @@ import { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://shadow-realm.vercel.app",
+      url: "https://anime-series-landing.vercel.app",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,

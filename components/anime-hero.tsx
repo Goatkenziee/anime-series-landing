@@ -1,149 +1,116 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "./ui/button";
-import { Sparkles, Play, ChevronDown } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { ChevronDown, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function AnimeHero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const [particles, setParticles] = useState<{ x: number; y: number; size: number; delay: number; duration: number }[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const arr = Array.from({ length: 30 }, () => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      delay: Math.random() * 3,
-      duration: Math.random() * 3 + 2,
-    }));
-    setParticles(arr);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles: { x: number; y: number; vx: number; vy: number; size: number; alpha: number }[] = [];
+    const particleCount = 80;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        size: Math.random() * 2 + 0.5,
+        alpha: Math.random() * 0.5 + 0.2,
+      });
+    }
+
+    let animId: number;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(147, 51, 234, ${p.alpha})`;
+        ctx.fill();
+      });
+      animId = requestAnimationFrame(animate);
+    }
+    animate();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
-    <section
-      ref={ref}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a]" />
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      {/* Particle canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Particles */}
-      {particles.map((p, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-purple-400/30"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-          }}
-          animate={{
-            opacity: [0, 0.8, 0],
-            scale: [0, 1, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Energy orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-600/10 blur-[120px] animate-energy-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-pink-600/10 blur-[100px] animate-energy-pulse" style={{ animationDelay: "1.5s" }} />
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-black z-[1]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600/10 via-transparent to-transparent z-[1]" />
 
       {/* Content */}
-      <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto"
-      >
-        {/* Badge */}
+      <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-sm text-purple-300 mb-8"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
         >
-          <Sparkles className="w-4 h-4" />
-          <span>New Series Premiering Soon</span>
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6"
-        >
-          <span className="gradient-text">Epic Anime</span>
-          <br />
-          <span className="text-white">Series</span>
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10"
-        >
-          A thrilling new saga inspired by the legacy of OneShot and Dragon Ball Z.
-          Unleash your power, discover new transformations, and fight for destiny.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="flex flex-wrap items-center justify-center gap-4"
-        >
-          <Button asChild size="lg">
-            <a href="#episodes">
-              <Play className="w-5 h-5 mr-2" />
+          <p className="mb-4 text-sm font-semibold tracking-widest text-purple-400 uppercase sm:text-base">
+            Coming Soon
+          </p>
+          <h1 className="mb-6 text-5xl font-bold leading-tight tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+            <span className="gradient-text">Shadow Realm</span>
+            <br />
+            <span className="text-white/90">Saga</span>
+          </h1>
+          <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg md:text-xl">
+            Four heroes. One prophecy. A battle that will transcend dimensions.
+            Welcome to the next evolution of anime.
+          </p>
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Button className="w-full sm:w-auto gap-2 bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 text-base text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-600/30 sm:px-10 sm:py-4 sm:text-lg">
+              <Play className="h-5 w-5" />
               Watch Trailer
-            </a>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <a href="#characters">
-              Meet the Characters
-            </a>
-          </Button>
+            </Button>
+            <Button variant="outline" className="w-full sm:w-auto border-gray-700 px-8 py-3 text-base text-gray-300 transition-all hover:border-purple-600 hover:text-white sm:px-10 sm:py-4 sm:text-lg">
+              Learn More
+            </Button>
+          </div>
         </motion.div>
+      </div>
 
-        {/* Scroll indicator */}
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <ChevronDown className="w-6 h-6 text-gray-500" />
-          </motion.div>
+          <ChevronDown className="h-6 w-6 text-purple-400/60" />
         </motion.div>
       </motion.div>
     </section>

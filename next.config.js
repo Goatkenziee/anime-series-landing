@@ -1,5 +1,15 @@
-// @ts-check
-// This file re-exports the config from next.config.mjs
-// Kept for environments that require .js config extension
-const nextConfig = require('./next.config.mjs');
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Suppress webpack managed paths warnings
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.snapshot = {
+        ...config.snapshot,
+        managedPaths: [],
+      };
+    }
+    return config;
+  },
+};
+
 module.exports = nextConfig;

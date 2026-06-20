@@ -1,54 +1,74 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Twitter, Youtube, Heart } from "lucide-react";
+
+const links = [
+  { name: "About", href: "#" },
+  { name: "Episodes", href: "#" },
+  { name: "Characters", href: "#" },
+  { name: "Merch", href: "#" },
+  { name: "Community", href: "#" },
+];
 
 export function AnimeFooter() {
   return (
-    <footer className="relative border-t border-gray-800 bg-black py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-6 md:gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              <span className="gradient-text">Epic Anime Series</span>
-            </h3>
-            <p className="mt-2 text-sm text-gray-500">
-              A new saga awaits. Are you ready?
-            </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex gap-4 sm:gap-6"
-          >
-            {[
-              { icon: Twitter, href: "#" },
-              { icon: Youtube, href: "#" },
-              { icon: Github, href: "#" },
-            ].map(({ icon: Icon, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-800 text-gray-500 transition-all hover:border-purple-600 hover:text-purple-400 hover:shadow-lg hover:shadow-purple-600/20 sm:h-12 sm:w-12"
-              >
-                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-              </a>
-            ))}
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex items-center gap-1 text-xs text-gray-600 sm:text-sm"
-          >
-            Made with <Heart className="h-3 w-3 text-red-500" /> for anime fans everywhere
-          </motion.p>
+    <footer className="relative border-t border-white/10 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          {/* Brand */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-purple-500 bg-clip-text text-transparent mb-3">
+                SOUL BLAZE
+              </h3>
+              <p className="text-gray-400 text-sm max-w-xs">
+                An original anime series. Power awakens within us all.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              {links.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-gray-400 hover:text-orange-400 transition-colors text-sm"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div>
+            <h4 className="text-white font-semibold mb-4">Follow the Saga</h4>
+            <div className="flex gap-3">
+              {["Twitter", "Discord", "YouTube"].map((social) => (
+                <a
+                  key={social}
+                  href="#"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-orange-500/20 hover:text-orange-400 transition-all text-sm"
+                >
+                  {social[0]}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-white/5 pt-6 text-center">
+          <p className="text-gray-500 text-xs">
+            &copy; {new Date().getFullYear()} Soul Blaze. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

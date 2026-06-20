@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://anime-series-landing.vercel.app/sitemap.xml
+Sitemap: https://soulblaze.vercel.app/sitemap.xml

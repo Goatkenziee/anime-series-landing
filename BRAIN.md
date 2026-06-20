@@ -1,49 +1,45 @@
 # BRAIN.md
 
 ## What this app does
-Anime series landing page for "Shadow Realm Saga" — a Dragon Ball Z / One Piece style animated landing page with particle effects, character showcase, episodes section, and transformations gallery.
+Anime-style landing page for the "Soul Blaze" animated series — like One Punch Man or Dragon Ball Z.
 
 ## Current state
-✅ **VERIFICATION FIX PASS 1/2 — Complete.** All TypeScript errors in `components/anime-hero.tsx` fixed.
+Build succeeds (exit 0). All components render. Fixed the stale `pages/` directory that caused `/_document` not-found error.
 
-## Tech stack
-- Next.js 14.2.5 (App Router)
-- TypeScript
-- Tailwind CSS
-- Framer Motion (animations)
-- Lucide React (icons)
-- class-variance-authority + tailwind-merge + clsx (UI utilities)
+## Tech stack and why
+- **Next.js 14.2.5** (App Router) — modern React, static generation
+- **Tailwind CSS 3.4** — utility-first styling
+- **Framer Motion 11** — scroll-triggered animations
+- **TypeScript** — type safety
 
 ## What has been built
-- `.gitignore`
-- `CRITERIA.md`
-- `PROJECT_STATE.json`
-- `app/error.tsx` — Client error boundary with gradient theme
-- `app/globals.css` — Global styles + gradient text utility
-- `app/layout.tsx` — Root layout with SEO metadata (OG, Twitter, robots)
-- `app/not-found.tsx` — Custom 404 page
-- `app/page.tsx` — Main page assembling all sections
-- `app/sitemap.ts` — Auto-generated sitemap
-- `components/anime-hero.tsx` — Hero with particle canvas animation
-- `components/anime-characters.tsx` — Character showcase grid
-- `components/anime-episodes.tsx` — Episode listing
-- `components/anime-footer.tsx` — Footer with links
-- `components/anime-transformations.tsx` — Transformation gallery
-- `components/ui/button.tsx` — Reusable button component
-- `components/ui/card.tsx` — Reusable card component
+- `app/page.tsx` — main landing page composing all sections
+- `app/layout.tsx` — root layout with Inter font + metadata
+- `app/globals.css` — Tailwind base + custom scrollbar + dark theme
+- `app/error.tsx` — client error boundary
+- `app/not-found.tsx` — 404 page
+- `app/sitemap.ts` — dynamic sitemap
+- `components/anime-hero.tsx` — fullscreen hero with particle canvas + CTA buttons
+- `components/anime-characters.tsx` — 4 character cards with element orbs
+- `components/anime-transformations.tsx` — power-level progression bars
+- `components/anime-episodes.tsx` — 6 episode cards with status badges
+- `components/anime-footer.tsx` — 3-column footer with links + social
+- `components/ui/button.tsx` — shadcn-style button with variants
+- `components/ui/card.tsx` — shadcn-style card
 - `lib/utils.ts` — cn() utility
-- `next-env.d.ts`
-- `next.config.js` / `next.config.mjs`
-- `package.json`
-- `postcss.config.mjs`
-- `public/robots.txt`
-- `tailwind.config.ts`
-- `tsconfig.json`
 
 ## Latest verification
-- ✅ TypeScript check: `npx tsc --noEmit` passes (exit 0)
-- ✅ Production build: `npm run build` passes (exit 0)
-- All 26 files present and consistent
+Build: ✅ `npm run build` exits 0, all routes static
+TypeScript: ✅ Compiled successfully
 
 ## What's still pending
-- Vercel deployment (blocked by platform tool availability)
+- Deploy to Vercel (needs Vercel integration reconnection)
+
+## User preferences detected
+- Anime/DBZ aesthetic: dark bg, orange/purple gradients, particles, power levels
+- Keep changes focused, modern, and production-ready
+
+## Run notes
+- Last updated: 2026-06-20T15:00:54.400Z
+- Autonomous iteration: 1
+- Fix: removed stale empty `pages/` dir + cleared `.next/` cache

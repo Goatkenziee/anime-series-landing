@@ -1,39 +1,49 @@
 # BRAIN.md
 
 ## What this app does
-build me a animate dlanding page for my new series like onehsot or dragon ball z
+Anime series landing page for "Shadow Realm Saga" — a Dragon Ball Z / One Piece style animated landing page with particle effects, character showcase, episodes section, and transformations gallery.
 
 ## Current state
-## ✅ Done — Full Build & Push Complete Here's what was accomplished: ### ✅ GitHub Repo **https://github.com/Goatkenziee/anime-series-landing** — 22 files pushed to `main` branch with all components, configs, and dependencies. ### ✅ What was fixed/added 1. **package.json** — Added `eslint` + `eslint-config-next` to devDependencies (required for Vercel builds) 2. **next.config.mjs** — Created ESM config, deleted old `next.config.js` 3. **Cleaned stale files** — Removed empty `pages/` directory and stale `next.config.js` 4. **All files pushed** to GitHub main branch 5. **NODE_ENV** set as Vercel env secret
+✅ **VERIFICATION FIX PASS 1/2 — Complete.** All TypeScript errors in `components/anime-hero.tsx` fixed.
 
-## Tech stack and why
-Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion
+## Tech stack
+- Next.js 14.2.5 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion (animations)
+- Lucide React (icons)
+- class-variance-authority + tailwind-merge + clsx (UI utilities)
 
 ## What has been built
-- CRITERIA.md
-- PROJECT_STATE.json
-- app/globals.css
-- app/layout.tsx
-- app/not-found.tsx
-- app/page.tsx
-- app/sitemap.ts
-- components/CharactersSection.tsx
-- components/ErrorBoundary.tsx
-- components/Footer.tsx
-- components/HeroSection.tsx
-- components/Navbar.tsx
-- components/ParticleBackground.tsx
-- components/SynopsisSection.tsx
-- next-env.d.ts
-- next.config.mjs
-- package.json
-- postcss.config.js
-- public/robots.txt
-- tailwind.config.ts
-- tsconfig.json
+- `.gitignore`
+- `CRITERIA.md`
+- `PROJECT_STATE.json`
+- `app/error.tsx` — Client error boundary with gradient theme
+- `app/globals.css` — Global styles + gradient text utility
+- `app/layout.tsx` — Root layout with SEO metadata (OG, Twitter, robots)
+- `app/not-found.tsx` — Custom 404 page
+- `app/page.tsx` — Main page assembling all sections
+- `app/sitemap.ts` — Auto-generated sitemap
+- `components/anime-hero.tsx` — Hero with particle canvas animation
+- `components/anime-characters.tsx` — Character showcase grid
+- `components/anime-episodes.tsx` — Episode listing
+- `components/anime-footer.tsx` — Footer with links
+- `components/anime-transformations.tsx` — Transformation gallery
+- `components/ui/button.tsx` — Reusable button component
+- `components/ui/card.tsx` — Reusable card component
+- `lib/utils.ts` — cn() utility
+- `next-env.d.ts`
+- `next.config.js` / `next.config.mjs`
+- `package.json`
+- `postcss.config.mjs`
+- `public/robots.txt`
+- `tailwind.config.ts`
+- `tsconfig.json`
 
 ## Latest verification
-- All verification issues fixed: removed empty pages/ files, set NODE_ENV
+- ✅ TypeScript check: `npx tsc --noEmit` passes (exit 0)
+- ✅ Production build: `npm run build` passes (exit 0)
+- All 26 files present and consistent
 
 ## What's still pending
-- Deploy to Vercel (needs Vercel integration reconnected)
+- Vercel deployment (blocked by platform tool availability)

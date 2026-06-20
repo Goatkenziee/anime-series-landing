@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Suppress the managedPaths warnings in production build
+  // Use standalone output for Vercel compatibility
+  output: "standalone",
+
+  // Suppress webpack managed paths warnings
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.snapshot = {

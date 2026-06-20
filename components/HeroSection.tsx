@@ -1,190 +1,146 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
-export default function HeroSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
+const HeroSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 0.8]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 20;
+      const y = (clientY / window.innerHeight - 0.5) * 20;
+      containerRef.current.style.setProperty("--mouse-x", `${x}px`);
+      containerRef.current.style.setProperty("--mouse-y", `${y}px`);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
     <section
-      id="hero"
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      ref={containerRef}
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-20"
     >
-      {/* Background gradient layers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#0d0d2b] to-[#0a0a1a]" />
-
-      {/* Ambient glow orbs */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)",
-        }}
-        animate={{
-          x: [0, 30, -20, 0],
-          y: [0, -30, 20, 0],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-15"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,107,53,0.3) 0%, transparent 70%)",
-        }}
-        animate={{
-          x: [0, -20, 30, 0],
-          y: [0, 20, -30, 0],
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-1/3 right-1/3 w-[300px] h-[300px] rounded-full opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)",
-        }}
-        animate={{
-          x: [0, 40, -10, 0],
-          y: [0, -10, 40, 0],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Energy rings */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <motion.div
-          className="w-[600px] h-[600px] rounded-full border border-[#8b5cf6]/10"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute w-[400px] h-[400px] rounded-full border border-[#ff6b35]/10"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute w-[250px] h-[250px] rounded-full border border-[#06b6d4]/15"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        />
+      {/* Background glow orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-1/4 -top-1/4 h-[600px] w-[600px] rounded-full bg-orange-500/10 blur-[120px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-purple-600/10 blur-[120px]" />
       </div>
 
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(139,92,246,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.3) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+      {/* Floating energy particles */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute h-1 w-1 rounded-full bg-orange-400/40"
+            style={{
+              left: `${10 + Math.random() * 80}%`,
+              top: `${10 + Math.random() * 80}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
 
-      {/* Main content */}
+      {/* Main title */}
       <motion.div
-        style={{ opacity, scale, y }}
-        className="relative z-10 text-center px-4 max-w-5xl mx-auto"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="relative z-10 text-center"
       >
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs sm:text-sm text-white/60 mb-6 sm:mb-8"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#ff6b35] animate-pulse" />
-          Coming 2026
-          <span className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse" />
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none mb-4"
-        >
-          <span className="shimmer-text">CHRONO</span>
-          <br />
-          <span className="text-gradient">STRIKE</span>
-        </motion.h1>
-
-        {/* Tagline */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-          className="text-lg sm:text-xl md:text-2xl text-white/50 max-w-2xl mx-auto mb-8 sm:mb-10 font-light"
+          initial={{ opacity: 0, letterSpacing: "8px" }}
+          animate={{ opacity: 1, letterSpacing: "4px" }}
+          transition={{ duration: 1.2, delay: 0.3 }}
+          className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-orange-400"
         >
-          When time bends, legends rise. An epic saga of power, destiny, and the
-          battle that transcends dimensions.
+          Coming Soon
+        </motion.p>
+
+        <h1 className="text-gradient animate-glow text-5xl font-black leading-tight sm:text-6xl md:text-7xl lg:text-8xl">
+          CHRONO
+          <br />
+          STRIKE
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="mx-auto mt-6 max-w-xl text-base text-gray-400 sm:text-lg md:text-xl"
+        >
+          When time becomes a weapon, the strongest warrior is the one who
+          defies fate itself.
         </motion.p>
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              document.getElementById("trailer")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="group relative px-8 py-3.5 bg-gradient-to-r from-[#ff6b35] to-[#8b5cf6] text-white font-bold text-base sm:text-lg rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#ff6b35]/30"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              Watch Trailer
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6] to-[#ff6b35] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </motion.button>
+          <button className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-3 text-base font-bold text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(249,115,22,0.5)]">
+            <span className="relative z-10">Watch Trailer</span>
+            <svg
+              className="relative z-10 h-5 w-5 transition-transform group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              document.getElementById("synopsis")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-8 py-3.5 border border-white/20 text-white/80 font-semibold text-base sm:text-lg rounded-full hover:bg-white/5 hover:border-white/40 transition-all duration-300"
-          >
+          <button className="rounded-full border border-white/20 px-8 py-3 text-base font-semibold text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:text-orange-400">
             Learn More
-          </motion.button>
+          </button>
         </motion.div>
+      </motion.div>
 
-        {/* Scroll indicator */}
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-10 z-10 flex flex-col items-center gap-2"
+      >
+        <span className="text-xs uppercase tracking-[0.2em] text-gray-600">
+          Scroll
+        </span>
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-white/30 text-xs tracking-widest uppercase">
-              Scroll
-            </span>
-            <div className="w-[1px] h-8 bg-gradient-to-b from-white/30 to-transparent" />
-          </motion.div>
-        </motion.div>
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="h-6 w-[1px] bg-gradient-to-b from-orange-500 to-transparent"
+        />
       </motion.div>
     </section>
   );
-}
+};
+
+export default HeroSection;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface Particle {
   x: number;
@@ -9,12 +9,11 @@ interface Particle {
   vy: number;
   size: number;
   alpha: number;
-  color: string;
-  pulse: number;
-  pulseSpeed: number;
+  life: number;
+  maxLife: number;
 }
 
-export default function ParticleBackground() {
+const ParticleBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -26,41 +25,30 @@ export default function ParticleBackground() {
 
     let animationId: number;
     let particles: Particle[] = [];
-    let mouseX = -1000;
-    let mouseY = -1000;
-    let time = 0;
-
-    const colors = [
-      "rgba(139, 92, 246,",  // purple
-      "rgba(59, 130, 246,",  // blue
-      "rgba(6, 182, 212,",   // cyan
-      "rgba(255, 107, 53,",  // orange
-      "rgba(255, 140, 66,",  // warm orange
-    ];
+    const MAX_PARTICLES = 120;
 
     const resize = () => {
-      canvas!.width = window.innerWidth;
-      canvas!.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const createParticle = (): Particle => {
+      const maxLife = 80 + Math.random() * 120;
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6 - 0.2,
+        size: 1 + Math.random() * 2.5,
+        alpha: 0.1 + Math.random() * 0.4,
+        life: 0,
+        maxLife,
+      };
     };
 
     const init = () => {
       resize();
-      const count = Math.min(Math.floor(window.innerWidth * 0.08), 120);
-      particles = [];
-
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * canvas!.width,
-          y: Math.random() * canvas!.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 3 + 1,
-          alpha: Math.random() * 0.5 + 0.1,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          pulse: Math.random() * Math.PI * 2,
-          pulseSpeed: Math.random() * 0.02 + 0.005,
-        });
-      }
+      particles = Array.from({ length: MAX_PARTICLES }, createParticle);
     };
 
     const drawConnections = () => {
@@ -69,100 +57,74 @@ export default function ParticleBackground() {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 120;
 
-          if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.15;
-            ctx!.beginPath();
-            ctx!.moveTo(particles[i].x, particles[i].y);
-            ctx!.lineTo(particles[j].x, particles[j].y);
-            ctx!.strokeStyle = `rgba(139, 92, 246, ${alpha})`;
-            ctx!.lineWidth = 0.5;
-            ctx!.stroke();
+          if (dist < maxDist) {
+            const alpha = (1 - dist / maxDist) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(249, 115, 22, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
           }
         }
       }
     };
 
     const animate = () => {
-      time += 0.01;
-      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (const p of particles) {
-        p.pulse += p.pulseSpeed;
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
+        p.life++;
 
-        // Mouse interaction
-        const dx = mouseX - p.x;
-        const dy = mouseY - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-          const force = (200 - dist) / 200 * 0.5;
-          p.x -= dx / dist * force;
-          p.y -= dy / dist * force;
+        // Fade out near end of life
+        const fadeAlpha =
+          p.life > p.maxLife * 0.7
+            ? p.alpha * (1 - (p.life - p.maxLife * 0.7) / (p.maxLife * 0.3))
+            : p.alpha;
+
+        if (fadeAlpha <= 0 || p.life >= p.maxLife) {
+          particles[i] = createParticle();
+          continue;
         }
 
-        // Wrap around
-        if (p.x < -10) p.x = canvas!.width + 10;
-        if (p.x > canvas!.width + 10) p.x = -10;
-        if (p.y < -10) p.y = canvas!.height + 10;
-        if (p.y > canvas!.height + 10) p.y = -10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 200, 100, ${fadeAlpha})`;
+        ctx.fill();
 
-        // Draw particle
-        const pulseAlpha = p.alpha + Math.sin(p.pulse) * 0.15;
-        const gradient = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-        gradient.addColorStop(0, `${p.color} ${pulseAlpha})`);
-        gradient.addColorStop(1, `${p.color} 0)`);
-
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        ctx!.fillStyle = gradient;
-        ctx!.fill();
-
-        // Core
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.size * 0.8, 0, Math.PI * 2);
-        ctx!.fillStyle = `${p.color} ${pulseAlpha + 0.3})`;
-        ctx!.fill();
+        // Glow effect
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(249, 115, 22, ${fadeAlpha * 0.1})`;
+        ctx.fill();
       }
 
       drawConnections();
       animationId = requestAnimationFrame(animate);
     };
 
-    const handleMouse = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
-
-    const handleTouch = (e: TouchEvent) => {
-      if (e.touches[0]) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-      }
-    };
-
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouse);
-    window.addEventListener("touchmove", handleTouch);
-
     init();
     animate();
 
+    window.addEventListener("resize", resize);
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouse);
-      window.removeEventListener("touchmove", handleTouch);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      id="particles-canvas"
-      className="fixed inset-0 pointer-events-none z-0"
+      className="pointer-events-none fixed inset-0 z-0"
       aria-hidden="true"
     />
   );
-}
+};
+
+export default ParticleBackground;

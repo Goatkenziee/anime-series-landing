@@ -1,214 +1,143 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
-const characters = [
+interface Character {
+  name: string;
+  title: string;
+  description: string;
+  color: string;
+  power: string;
+}
+
+const characters: Character[] = [
   {
-    name: "Ryo Tenshi",
-    title: "The Chrono Wielder",
-    color: "#ff6b35",
-    gradient: "from-[#ff6b35] to-[#ff8c42]",
+    name: "RAIKEN",
+    title: "The Chrono Warden",
     description:
-      "A prodigy who awakened the Chrono Strike within. Reckless, fierce, and driven by an unbreakable will to protect those he loves.",
+      "A lone warrior who awakens the power to manipulate time itself. Torn between destiny and free will, Raiken must master the Chrono Strike before the Void consumes all reality.",
+    color: "from-orange-400 to-red-500",
     power: "Time Manipulation",
-    symbol: "⏳",
   },
   {
-    name: "Kai Stormveil",
-    title: "The Void Walker",
-    color: "#8b5cf6",
-    gradient: "from-[#8b5cf6] to-[#a78bfa]",
+    name: "SERAPHINA",
+    title: "The Void Seer",
     description:
-      "A mysterious warrior from a fractured dimension. Master of the Void Arts, he seeks redemption for a past he cannot remember.",
-    power: "Dimensional Shift",
-    symbol: "🌀",
+      "A mysterious oracle who sees across timelines. Her visions guide the heroes, but her past holds a dark secret that could unravel everything they fight for.",
+    color: "from-purple-400 to-pink-500",
+    power: "Timeline Vision",
   },
   {
-    name: "Luna Aethel",
-    title: "The Arcane Sentinel",
-    color: "#06b6d4",
-    gradient: "from-[#06b6d4] to-[#22d3ee]",
+    name: "GORATH",
+    title: "The Chrono Breaker",
     description:
-      "Last of the ancient Aethel bloodline, she wields crystalline arcane magic. Calm, calculating, and devastating in battle.",
-    power: "Crystal Arcana",
-    symbol: "💎",
+      "A fallen titan who shattered the first timeline. Gorath commands the Void energy and seeks to unmake all of creation — one era at a time.",
+    color: "from-cyan-400 to-blue-500",
+    power: "Void Energy",
   },
   {
-    name: "Zarathos",
-    title: "The Chronophage",
-    color: "#ef4444",
-    gradient: "from-[#ef4444] to-[#f87171]",
+    name: "LYRA",
+    title: "The Speed Phantom",
     description:
-      "A being from beyond the timestream who consumes entire timelines. His arrival signals the beginning of the end.",
-    power: "Timeline Devourer",
-    symbol: "🌑",
+      "A rogue time-runner who moves faster than light itself. Lyra fights on her own terms, but when the multiverse is at stake, even a lone wolf must join the pack.",
+    color: "from-yellow-400 to-amber-500",
+    power: "Hypervelocity",
   },
 ];
 
-export default function CharactersSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+};
 
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
+const CharactersSection = () => {
   return (
-    <section
-      id="characters"
-      ref={sectionRef}
-      className="relative py-24 sm:py-32 overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a1a] via-[#0d0d2b]/30 to-[#0a0a1a]" />
-
+    <section className="relative px-4 py-24 sm:px-6 lg:px-8" id="characters">
+      {/* Section header */}
       <motion.div
-        style={{ opacity }}
-        className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+        className="mb-16 text-center"
       >
-        {/* Section header */}
-        <div className="text-center mb-16 sm:mb-20">
+        <h2 className="text-gradient inline-block text-4xl font-black sm:text-5xl lg:text-6xl">
+          CHARACTERS
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-gray-400">
+          Every legend needs its heroes — and its villains. Meet the warriors
+          who will decide the fate of time itself.
+        </p>
+      </motion.div>
+
+      {/* Character cards grid */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {characters.map((char) => (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3 mb-6"
+            key={char.name}
+            variants={cardVariants}
+            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 hover:border-orange-500/30 hover:shadow-[0_0_40px_rgba(249,115,22,0.15)]"
           >
-            <div className="h-px w-8 bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent" />
-            <span className="text-[#8b5cf6] text-sm font-semibold tracking-widest uppercase">
-              The Warriors
-            </span>
-            <div className="h-px w-8 bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent" />
+            {/* Color accent bar */}
+            <div
+              className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${char.color}`}
+            />
+
+            {/* Character avatar placeholder */}
+            <div
+              className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br ${char.color} text-2xl font-black text-black shadow-lg`}
+            >
+              {char.name[0]}
+            </div>
+
+            {/* Name & Title */}
+            <h3 className="text-center text-xl font-bold text-white">
+              {char.name}
+            </h3>
+            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wider text-orange-400">
+              {char.title}
+            </p>
+
+            {/* Power badge */}
+            <div className="mb-3 text-center">
+              <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                {char.power}
+              </span>
+            </div>
+
+            {/* Description */}
+            <p className="text-center text-sm leading-relaxed text-gray-400">
+              {char.description}
+            </p>
+
+            {/* Hover glow effect */}
+            <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-orange-500/5 to-transparent" />
+            </div>
           </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.7 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4"
-          >
-            Meet the{" "}
-            <span className="text-gradient-purple">Legends</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.7 }}
-            className="text-white/40 max-w-xl mx-auto"
-          >
-            Every hero has a story. Every villain has a reason. These are the
-            souls who will decide the fate of all realities.
-          </motion.p>
-        </div>
-
-        {/* Character cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {characters.map((char, i) => (
-            <CharacterCard key={char.name} character={char} index={i} />
-          ))}
-        </div>
+        ))}
       </motion.div>
     </section>
   );
-}
+};
 
-function CharacterCard({
-  character,
-  index,
-}: {
-  character: (typeof characters)[0];
-  index: number;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-      whileHover={{ y: -8 }}
-      className="group relative rounded-2xl overflow-hidden bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all duration-500"
-    >
-      {/* Hover glow */}
-      <div
-        className="absolute -inset-20 opacity-0 group-hover:opacity-30 transition-opacity duration-700 blur-3xl pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, ${character.color} 0%, transparent 70%)`,
-        }}
-      />
-
-      {/* Card content */}
-      <div className="relative p-6 sm:p-8">
-        {/* Symbol + power badge */}
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-3xl sm:text-4xl">{character.symbol}</span>
-          <span
-            className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-medium uppercase tracking-wider"
-            style={{
-              color: character.color,
-              background: `${character.color}15`,
-              border: `1px solid ${character.color}30`,
-            }}
-          >
-            {character.power}
-          </span>
-        </div>
-
-        {/* Avatar placeholder */}
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-5 rounded-full overflow-hidden">
-          <div
-            className={`absolute inset-0 bg-gradient-to-br ${character.gradient} opacity-30`}
-          />
-          <div className="absolute inset-2 rounded-full bg-[#0a0a1a] flex items-center justify-center">
-            <div
-              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full opacity-20"
-              style={{
-                background: `radial-gradient(circle, ${character.color}, transparent)`,
-              }}
-            />
-          </div>
-          {/* Ring */}
-          <div
-            className="absolute inset-0 rounded-full border-2 opacity-50"
-            style={{
-              borderColor: character.color,
-              boxShadow: `0 0 15px ${character.color}40`,
-            }}
-          />
-        </div>
-
-        {/* Name & Title */}
-        <div className="text-center mb-4">
-          <h3
-            className="text-lg sm:text-xl font-black tracking-tight mb-1"
-            style={{ color: character.color }}
-          >
-            {character.name}
-          </h3>
-          <p className="text-xs sm:text-sm text-white/40 font-medium">
-            {character.title}
-          </p>
-        </div>
-
-        {/* Description */}
-        <p className="text-xs sm:text-sm text-white/40 leading-relaxed text-center">
-          {character.description}
-        </p>
-      </div>
-
-      {/* Bottom accent */}
-      <div
-        className="h-0.5 w-0 group-hover:w-full transition-all duration-500"
-        style={{
-          background: `linear-gradient(90deg, ${character.color}, transparent)`,
-        }}
-      />
-    </motion.div>
-  );
-}
+export default CharactersSection;

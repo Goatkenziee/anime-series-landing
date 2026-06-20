@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T07:09:11.961Z",
+  "updatedAt": "2026-06-20T07:21:15.214Z",
   "framework": "Next.js",
   "dbModels": [],
   "apiRoutes": [],
@@ -8,6 +8,7 @@
   ],
   "components": [
     "app/layout.tsx",
+    "app/not-found.tsx",
     "components/CharactersSection.tsx",
     "components/HeroSection.tsx",
     "components/Navbar.tsx",
@@ -29,5 +30,5 @@
     "tailwindcss",
     "typescript"
   ],
-  "fileCount": 16
+  "fileCount": 18
 }

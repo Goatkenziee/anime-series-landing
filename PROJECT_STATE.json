@@ -1,36 +1,29 @@
 {
-  "updatedAt": "2026-06-20T07:23:44.696Z",
-  "framework": "Next.js",
-  "dbModels": [],
-  "apiRoutes": [],
-  "pages": [
-    "app/page.tsx",
-    "pages/_app.tsx",
-    "pages/_document.tsx"
-  ],
-  "components": [
+  "goal": "build me a animate dlanding page for my new series like onehsot or dragon ball z",
+  "updatedAt": "2026-06-20T07:19:52.296Z",
+  "runCount": 1,
+  "autonomousIteration": 1,
+  "repoUrl": null,
+  "deployUrl": null,
+  "fileCount": 18,
+  "files": [
+    "BRAIN.md",
+    "CRITERIA.md",
+    "app/globals.css",
     "app/layout.tsx",
     "app/not-found.tsx",
+    "app/page.tsx",
     "components/CharactersSection.tsx",
     "components/HeroSection.tsx",
     "components/Navbar.tsx",
     "components/ParticleBackground.tsx",
-    "components/SynopsisSection.tsx"
+    "components/SynopsisSection.tsx",
+    "next-env.d.ts",
+    "next.config.js",
+    "package.json",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "tsconfig.json"
   ],
-  "dependencies": [
-    "@types/node",
-    "@types/react",
-    "@types/react-dom",
-    "autoprefixer",
-    "clsx",
-    "framer-motion",
-    "next",
-    "postcss",
-    "react",
-    "react-dom",
-    "tailwind-merge",
-    "tailwindcss",
-    "typescript"
-  ],
-  "fileCount": 20
+  "lastRunSummary": "**Build succeeds perfectly.** All pages compiled, zero errors, zero warnings. --- ## ✅ Summary — What was fixed The TypeScript verification issues from the last run are **fully resolved**: | File | Change | |---|---| | **`tsconfig.json`** | Removed `.next/types/**/*.ts` from `include` — was causing TS6053 errors for missing generated files | | **`next-env.d.ts`** | Added (was missing) — provides Next.js type declarations | | **`pages/_document.tsx`** | Added — fixes `/_document` build error in Next.js 14.2.x | | **`pages/_app.tsx`** | Added — fixes `/_app` build error | | **`app/not-found.tsx`** | Added — fixes `/_not-found` build error | | **✅ Verification Results - **`tsc --noEmit`** → exit 0 ✅ - **`next build`** → exit 0 ✅ (4 static pages generated, all routes compiled) - **GitHub** → pu"
 }

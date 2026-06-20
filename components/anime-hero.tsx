@@ -14,16 +14,20 @@ export function AnimeHero() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Capture non-null refs so closures see them as definitely non-null
+    const cvs: HTMLCanvasElement = canvas;
+    const c: CanvasRenderingContext2D = ctx;
+
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
 
     const particles: { x: number; y: number; vx: number; vy: number; size: number; alpha: number }[] = [];
     const particleCount = 80;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * cvs.width,
+        y: Math.random() * cvs.height,
         vx: (Math.random() - 0.5) * 0.8,
         vy: (Math.random() - 0.5) * 0.8,
         size: Math.random() * 2 + 0.5,
@@ -33,24 +37,24 @@ export function AnimeHero() {
 
     let animId: number;
     function animate() {
-      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+      c.clearRect(0, 0, cvs.width, cvs.height);
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0 || p.x > canvas!.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas!.height) p.vy *= -1;
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(147, 51, 234, ${p.alpha})`;
-        ctx!.fill();
+        if (p.x < 0 || p.x > cvs.width) p.vx *= -1;
+        if (p.y < 0 || p.y > cvs.height) p.vy *= -1;
+        c.beginPath();
+        c.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        c.fillStyle = `rgba(147, 51, 234, ${p.alpha})`;
+        c.fill();
       });
       animId = requestAnimationFrame(animate);
     }
     animate();
 
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      cvs.width = window.innerWidth;
+      cvs.height = window.innerHeight;
     };
     window.addEventListener("resize", handleResize);
     return () => {

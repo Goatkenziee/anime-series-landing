@@ -1,7 +1,56 @@
 # BRAIN.md
 
 ## What this app does
-build me a animate dlanding page for my new series like onehsot or dragon ball z
+An animated landing page for "CHRONO STRIKE" — an anime series inspired by Dragon Ball Z and One Punch Man.
 
 ## Current state
-**Build succeeds perfectly.** All pages compiled, zero errors, zero warnings. --- ## ✅ Summary — What was fixed The TypeScript verification issues from the last run are **fully resolved**: | File | Change | |---|---| | **`tsconfig.json`** | Removed `.next/types/**/*.ts` from `include` — was causing TS6053 errors for missing generated files | | **`next-env.d.ts`** | Added (was missing) — provides Next.js type declarations | | **`pages/_document.tsx`** | Added — fixes `/_document` build error in Next.js 14.2.x | | **`pages/_app.tsx`** | Added — fixes `/_app` build error | | **`app/not-found.tsx`** | Added — fixes `/_not-found` build error | ## ✅ Verification Results - **`tsc --noEmit`** → exit 0 ✅ - **`next build`** → exit 0 ✅ (4 static pages generated, all routes compiled) - **GitHub** → pushed to `Goatkenziee/anime-series-landing@main` ✅ ## ⚠️ One blocker **Vercel deploy is blocked** — y
+**Build succeeds perfectly.** All pages compiled, zero errors, zero warnings.
+Both App Router (`/`, `/_not-found`) and Pages Router (`/_app`, `/_document`) compile successfully.
+
+## Tech stack
+- Next.js 14.2.35 (hybrid App Router + Pages Router)
+- Tailwind CSS 3.4
+- TypeScript
+- Framer Motion (for scroll animations)
+- Canvas-based particle background
+
+## What has been built
+- CRITERIA.md
+- PROJECT_STATE.json
+- app/globals.css (dark theme, gradient text, scroll animations, custom scrollbar)
+- app/layout.tsx (root layout with Poppins font, metadata)
+- app/not-found.tsx (404 page)
+- app/page.tsx (main page assembling all components)
+- components/Navbar.tsx (sticky nav with scroll-based glass effect, smooth scroll links)
+- components/HeroSection.tsx (title "CHRONO STRIKE", subtitle, CTA buttons, scroll indicator)
+- components/SynopsisSection.tsx (scroll-driven fade-in story paragraphs, quote block)
+- components/CharactersSection.tsx (4 character cards: Kael, Seraphina, Draven, Mira)
+- components/ParticleBackground.tsx (canvas-based orange particle system with connections)
+- pages/_document.tsx (Next.js custom Document)
+- pages/_app.tsx (Next.js custom App)
+- next.config.js
+- package.json
+- postcss.config.js
+- tailwind.config.ts
+- tsconfig.json
+- next-env.d.ts
+
+## Latest verification
+**`next build` → exit 0 ✅**
+- Compiled successfully
+- Linting and types pass
+- Static pages generated (4/4)
+- Both App Router and Pages Router routes compiled
+
+## What's still pending
+- **Vercel deploy**: Blocked — integration expired. User needs to reconnect at Settings → Integrations → Vercel.
+
+## User preferences detected
+- Dragon Ball Z / One Punch Man style anime aesthetic
+- Dark theme with orange/purple accent colors
+- Smooth scroll animations
+- Particle background
+
+## Run notes
+- Last updated: 2026-06-20
+- GitHub: https://github.com/Goatkenziee/anime-series-landing

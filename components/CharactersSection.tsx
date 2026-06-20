@@ -1,143 +1,124 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
-interface Character {
-  name: string;
-  title: string;
-  description: string;
-  color: string;
-  power: string;
-}
-
-const characters: Character[] = [
+const characters = [
   {
-    name: "RAIKEN",
-    title: "The Chrono Warden",
+    name: "RAIDEN",
+    title: "The Shadow Warden",
     description:
-      "A lone warrior who awakens the power to manipulate time itself. Torn between destiny and free will, Raiken must master the Chrono Strike before the Void consumes all reality.",
-    color: "from-orange-400 to-red-500",
-    power: "Time Manipulation",
+      "A lone warrior wielding the ancient power of shadow manipulation. Raiden guards the boundary between worlds, but a dark secret threatens to consume him.",
+    color: "from-purple-500 to-blue-500",
+    glowColor: "shadow-purple-500/50",
+    power: "Shadow Manipulation",
+    rank: "S-Tier",
   },
   {
-    name: "SERAPHINA",
-    title: "The Void Seer",
+    name: "AKIRA",
+    title: "The Thunder Empress",
     description:
-      "A mysterious oracle who sees across timelines. Her visions guide the heroes, but her past holds a dark secret that could unravel everything they fight for.",
-    color: "from-purple-400 to-pink-500",
-    power: "Timeline Vision",
+      "Born from a lightning strike, Akira commands storms with a flick of her wrist. Her quest for the truth behind her origins leads her into the Shadow Realm.",
+    color: "from-yellow-400 to-orange-500",
+    glowColor: "shadow-yellow-500/50",
+    power: "Storm Control",
+    rank: "S-Tier",
   },
   {
-    name: "GORATH",
-    title: "The Chrono Breaker",
+    name: "ZER0",
+    title: "The Void Assassin",
     description:
-      "A fallen titan who shattered the first timeline. Gorath commands the Void energy and seeks to unmake all of creation — one era at a time.",
-    color: "from-cyan-400 to-blue-500",
-    power: "Void Energy",
+      "A mysterious figure from the Shadow Realm itself. Zer0's allegiance is unknown, but his blade never misses. Is he friend or foe?",
+    color: "from-cyan-400 to-teal-500",
+    glowColor: "shadow-cyan-500/50",
+    power: "Void Step",
+    rank: "A-Tier",
   },
   {
     name: "LYRA",
-    title: "The Speed Phantom",
+    title: "The Soul Weaver",
     description:
-      "A rogue time-runner who moves faster than light itself. Lyra fights on her own terms, but when the multiverse is at stake, even a lone wolf must join the pack.",
-    color: "from-yellow-400 to-amber-500",
-    power: "Hypervelocity",
+      "A healer with the rare ability to mend shattered souls. Lyra's gentle nature hides an unbreakable will, and her powers may be the key to saving the realm.",
+    color: "from-pink-400 to-rose-500",
+    glowColor: "shadow-pink-500/50",
+    power: "Soul Weaving",
+    rank: "A-Tier",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
-};
+export default function CharactersSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
-
-const CharactersSection = () => {
   return (
-    <section className="relative px-4 py-24 sm:px-6 lg:px-8" id="characters">
-      {/* Section header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-16 text-center"
-      >
-        <h2 className="text-gradient inline-block text-4xl font-black sm:text-5xl lg:text-6xl">
-          CHARACTERS
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-gray-400">
-          Every legend needs its heroes — and its villains. Meet the warriors
-          who will decide the fate of time itself.
-        </p>
-      </motion.div>
+    <section
+      id="characters"
+      className="relative py-24 px-4 sm:px-8 lg:px-16"
+      ref={ref}
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
+            <span className="gradient-text">CHARACTERS</span>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Meet the warriors who will shape the fate of the Shadow Realm
+          </p>
+        </motion.div>
 
-      {/* Character cards grid */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {characters.map((char) => (
-          <motion.div
-            key={char.name}
-            variants={cardVariants}
-            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 hover:border-orange-500/30 hover:shadow-[0_0_40px_rgba(249,115,22,0.15)]"
-          >
-            {/* Color accent bar */}
-            <div
-              className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${char.color}`}
-            />
-
-            {/* Character avatar placeholder */}
-            <div
-              className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br ${char.color} text-2xl font-black text-black shadow-lg`}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {characters.map((character, index) => (
+            <motion.div
+              key={character.name}
+              initial={{ opacity: 0, y: 60 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              className="group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/30 transition-all duration-500 hover:-translate-y-2"
             >
-              {char.name[0]}
-            </div>
+              {/* Glow effect */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-b ${character.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-500`}
+              />
 
-            {/* Name & Title */}
-            <h3 className="text-center text-xl font-bold text-white">
-              {char.name}
-            </h3>
-            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wider text-orange-400">
-              {char.title}
-            </p>
+              {/* Character card content */}
+              <div className="relative z-10">
+                {/* Avatar placeholder */}
+                <div
+                  className={`w-20 h-20 rounded-full bg-gradient-to-br ${character.color} mb-4 mx-auto flex items-center justify-center text-2xl font-bold shadow-lg ${character.glowColor}`}
+                >
+                  {character.name[0]}
+                </div>
 
-            {/* Power badge */}
-            <div className="mb-3 text-center">
-              <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                {char.power}
-              </span>
-            </div>
+                <h3 className="text-xl font-bold text-center mb-1">
+                  {character.name}
+                </h3>
+                <p className="text-sm text-orange-400 text-center mb-3">
+                  {character.title}
+                </p>
 
-            {/* Description */}
-            <p className="text-center text-sm leading-relaxed text-gray-400">
-              {char.description}
-            </p>
+                <div className="flex justify-center gap-2 mb-3">
+                  <span className="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300">
+                    {character.power}
+                  </span>
+                  <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-orange-500/30 to-pink-500/30 text-orange-300">
+                    {character.rank}
+                  </span>
+                </div>
 
-            {/* Hover glow effect */}
-            <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-orange-500/5 to-transparent" />
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+                <p className="text-sm text-gray-400 text-center leading-relaxed">
+                  {character.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </section>
   );
-};
-
-export default CharactersSection;
+}

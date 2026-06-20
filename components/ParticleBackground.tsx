@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface Particle {
   x: number;
@@ -8,12 +8,11 @@ interface Particle {
   vx: number;
   vy: number;
   size: number;
-  alpha: number;
-  life: number;
-  maxLife: number;
+  opacity: number;
+  color: string;
 }
 
-const ParticleBackground = () => {
+export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -23,108 +22,85 @@ const ParticleBackground = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationId: number;
+    let animationFrameId: number;
     let particles: Particle[] = [];
-    const MAX_PARTICLES = 120;
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
-    const createParticle = (): Particle => {
-      const maxLife = 80 + Math.random() * 120;
-      return {
+    const createParticles = () => {
+      const count = Math.min(
+        Math.floor((canvas.width * canvas.height) / 15000),
+        100
+      );
+      particles = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6 - 0.2,
-        size: 1 + Math.random() * 2.5,
-        alpha: 0.1 + Math.random() * 0.4,
-        life: 0,
-        maxLife,
-      };
-    };
-
-    const init = () => {
-      resize();
-      particles = Array.from({ length: MAX_PARTICLES }, createParticle);
-    };
-
-    const drawConnections = () => {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const maxDist = 120;
-
-          if (dist < maxDist) {
-            const alpha = (1 - dist / maxDist) * 0.15;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(249, 115, 22, ${alpha})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.5 + 0.2,
+        color: Math.random() > 0.5 ? "#ff6b35" : "#0096ff",
+      }));
     };
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life++;
+      particles.forEach((particle, i) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
-        // Fade out near end of life
-        const fadeAlpha =
-          p.life > p.maxLife * 0.7
-            ? p.alpha * (1 - (p.life - p.maxLife * 0.7) / (p.maxLife * 0.3))
-            : p.alpha;
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-        if (fadeAlpha <= 0 || p.life >= p.maxLife) {
-          particles[i] = createParticle();
-          continue;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.globalAlpha = particle.opacity;
+        ctx.fill();
+
+        // Draw connections
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particle.x - particles[j].x;
+          const dy = particle.y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(255, 107, 53, ${0.1 * (1 - distance / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
         }
+      });
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 200, 100, ${fadeAlpha})`;
-        ctx.fill();
-
-        // Glow effect
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(249, 115, 22, ${fadeAlpha * 0.1})`;
-        ctx.fill();
-      }
-
-      drawConnections();
-      animationId = requestAnimationFrame(animate);
+      ctx.globalAlpha = 1;
+      animationFrameId = requestAnimationFrame(animate);
     };
 
-    init();
+    resize();
+    createParticles();
     animate();
 
     window.addEventListener("resize", resize);
+
     return () => {
-      cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0"
-      aria-hidden="true"
+      id="particle-canvas"
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: 0 }}
     />
   );
-};
-
-export default ParticleBackground;
+}

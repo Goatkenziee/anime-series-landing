@@ -1,53 +1,39 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  title: "CHRONO STRIKE — A New Era Begins | Official Anime Series",
+  title: "SHADOW REALM — An Epic New Anime Series",
   description:
-    "An epic anime series coming soon. Power awakens. Legends rise. The battle for eternity begins. In a reality where time itself is a weapon, a young warrior discovers the Chrono Strike.",
+    "Enter the Shadow Realm — a breathtaking new anime series blending dark fantasy with electrifying combat. Coming soon.",
   keywords: [
     "anime",
-    "chrono strike",
-    "dragon ball z",
+    "shadow realm",
+    "new series",
+    "dark fantasy",
+    "dragon ball",
     "one punch man",
-    "anime series",
-    "action anime",
-    "time travel anime",
-    "new anime 2025",
+    "action",
   ],
-  authors: [{ name: "CHRONO STRIKE" }],
   openGraph: {
-    title: "CHRONO STRIKE — A New Era Begins",
+    title: "SHADOW REALM — An Epic New Anime Series",
     description:
-      "An epic anime series coming soon. Power awakens. Legends rise. The battle for eternity begins.",
+      "Enter the Shadow Realm — a breathtaking new anime series blending dark fantasy with electrifying combat.",
     type: "website",
     locale: "en_US",
-    siteName: "CHRONO STRIKE",
-    images: [
-      {
-        url: "https://youme-rho.vercel.app/api/agent-artifacts/chrono-strike-og.png",
-        width: 1200,
-        height: 630,
-        alt: "CHRONO STRIKE — A New Era Begins",
-      },
-    ],
+    siteName: "Shadow Realm",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CHRONO STRIKE — A New Era Begins",
+    title: "SHADOW REALM — An Epic New Anime Series",
     description:
-      "An epic anime series coming soon. Power awakens. Legends rise. The battle for eternity begins.",
-    images: [
-      "https://youme-rho.vercel.app/api/agent-artifacts/chrono-strike-og.png",
-    ],
+      "Enter the Shadow Realm — a breathtaking new anime series blending dark fantasy with electrifying combat.",
   },
   robots: {
     index: true,
     follow: true,
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -57,10 +43,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="font-body antialiased bg-[#0a0a1a] text-white">
-        {children}
-      </body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

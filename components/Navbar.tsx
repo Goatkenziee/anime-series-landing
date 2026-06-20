@@ -1,79 +1,71 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const navLinks = [
-  { label: "Home", href: "#" },
-  { label: "Story", href: "#synopsis" },
-  { label: "Characters", href: "#characters" },
-  { label: "Trailer", href: "#" },
-];
-
-const Navbar = () => {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navLinks = [
+    { label: "Home", href: "/" },
+    { label: "Synopsis", href: "#synopsis" },
+    { label: "Characters", href: "#characters" },
+    { label: "Trailer", href: "#" },
+  ];
+
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "border-b border-white/5 bg-[#0a0a1a]/90 backdrop-blur-xl"
+          ? "bg-[#0a0a1a]/90 backdrop-blur-md border-b border-white/5"
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-        {/* Logo */}
-        <a href="#" className="group flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-xs font-black text-black">
-            CS
-          </div>
-          <span className="text-sm font-bold tracking-wider text-white transition-colors group-hover:text-orange-400">
-            CHRONO STRIKE
-          </span>
-        </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          {/* Logo */}
+          <a href="/" className="text-xl sm:text-2xl font-bold">
+            <span className="gradient-text">S</span>
+            <span className="text-white">R</span>
+          </a>
 
-        {/* Desktop links */}
-        <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                {link.label}
+              </a>
+            ))}
             <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-medium text-gray-400 transition-colors hover:text-orange-400"
+              href="#"
+              className="px-5 py-2 text-sm bg-gradient-to-r from-orange-500 to-pink-500 rounded-full font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300"
             >
-              {link.label}
+              Watch Trailer
             </a>
-          ))}
-          <button className="rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-5 py-2 text-xs font-bold text-black transition-all hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
-            SUBSCRIBE
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden text-white p-2"
+            aria-label="Toggle menu"
+          >
+            <div className="w-6 h-0.5 bg-white mb-1.5" />
+            <div className="w-6 h-0.5 bg-white mb-1.5" />
+            <div className="w-6 h-0.5 bg-white" />
           </button>
         </div>
-
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="relative z-50 flex h-8 w-8 flex-col items-center justify-center gap-1.5 md:hidden"
-          aria-label="Toggle menu"
-        >
-          <motion.span
-            animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className="h-[2px] w-6 rounded-full bg-white"
-          />
-          <motion.span
-            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="h-[2px] w-6 rounded-full bg-white"
-          />
-          <motion.span
-            animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className="h-[2px] w-6 rounded-full bg-white"
-          />
-        </button>
       </div>
 
       {/* Mobile menu */}
@@ -83,29 +75,29 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-white/5 bg-[#0a0a1a]/95 backdrop-blur-xl md:hidden"
+            className="md:hidden bg-[#0a0a1a]/95 backdrop-blur-md border-b border-white/5"
           >
-            <div className="flex flex-col gap-4 px-4 py-6">
+            <div className="px-4 py-4 space-y-3">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-base font-medium text-gray-300 transition-colors hover:text-orange-400"
+                  className="block text-gray-400 hover:text-white transition-colors duration-300 py-2"
                 >
                   {link.label}
                 </a>
               ))}
-              <button className="mt-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 text-sm font-bold text-black">
-                SUBSCRIBE
-              </button>
+              <a
+                href="#"
+                className="block text-center px-5 py-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full font-semibold"
+              >
+                Watch Trailer
+              </a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
   );
-};
-
-export default Navbar;
+}

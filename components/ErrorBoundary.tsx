@@ -1,62 +1,48 @@
 "use client";
 
-import React, { Component, type ReactNode } from "react";
+import { Component, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
-  fallback?: ReactNode;
 }
 
 interface State {
   hasError: boolean;
-  error: Error | null;
+  error?: Error;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("ErrorBoundary caught:", error, errorInfo);
-  }
-
   render() {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a1a] px-4 text-center">
-          <div className="mb-6 text-6xl">⚡</div>
-          <h1 className="mb-2 text-2xl font-bold text-orange-500">
-            Something went wrong
-          </h1>
-          <p className="mb-8 max-w-md text-gray-400">
-            The Chrono energy fluctuated. Please try refreshing the page.
-          </p>
-          <button
-            onClick={() => {
-              this.setState({ hasError: false, error: null });
-              window.location.reload();
-            }}
-            className="rounded-full bg-orange-500 px-8 py-3 font-semibold text-black transition hover:bg-orange-400"
-          >
-            Reload
-          </button>
-          {process.env.NODE_ENV === "development" && this.state.error && (
-            <pre className="mt-8 max-w-xl overflow-auto rounded-lg bg-black/50 p-4 text-left text-xs text-red-400">
-              {this.state.error.message}
-              {"\n"}
-              {this.state.error.stack}
-            </pre>
-          )}
+        <div className="min-h-screen bg-[#0a0a1a] text-white flex items-center justify-center">
+          <div className="text-center px-4">
+            <h1 className="text-6xl font-bold gradient-text mb-4">
+              ERROR
+            </h1>
+            <h2 className="text-xl font-semibold mb-4">
+              The Shadow Realm has destabilized
+            </h2>
+            <p className="text-gray-400 mb-6 max-w-md mx-auto">
+              An unexpected error occurred. Our warriors are working to restore
+              balance.
+            </p>
+            <button
+              onClick={() => this.setState({ hasError: false })}
+              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
       );
     }

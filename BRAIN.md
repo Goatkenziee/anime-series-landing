@@ -1,52 +1,48 @@
 # BRAIN.md
 
 ## What this app does
-An animated landing page for the "Soul Blaze" anime series — styled like One Punch Man / Dragon Ball Z. Features a particle-canvas hero, character cards, transformation power bars, episode listings, and scroll-triggered animations.
+build me a animate dlanding page for my new series like onehsot or dragon ball z
 
 ## Current state
-✅ **BUILD PASSES** — `npm run build` exits 0, all 5 static pages generated, zero TS errors.
-✅ **ROOT CAUSE FIXED** — Empty `pages/` files (`_app.tsx`, `_document.tsx`, `_error.tsx`) deleted from workspace. These were causing `PageNotFoundError: Cannot find module for page: /_document` during the build's "Collecting page data" phase because Next.js 14.2's hybrid Router tried to load them.
-✅ All 5 components built: AnimeHero, AnimeCharacters, AnimeTransformations, AnimeEpisodes, AnimeFooter.
-✅ Framer Motion scroll animations + canvas particle system + CSS energy effects.
-✅ Pushed to GitHub: https://github.com/Goatkenziee/anime-series-landing
-❌ Deploy to Vercel blocked — "temporarily unavailable due to platform configuration" on the deployment service. Code is ready to deploy manually.
+4 of 5 criteria are done. The only remaining one is Vercel deploy, which is blocked by platform config (not a code issue). Since the iteration is about fixing the build verification issue — and that's now fully resolved — let me provide the final summary. --- ## ✅ Build Fix Complete — Summary **Root cause identified & fixed:** The `PageNotFoundError: Cannot find module for page: /_document` was caused by **empty `pages/` files** (`_app.tsx`, `_document.tsx`, `_error.tsx`) that existed in the workspace from a previous run. Next.js 14.2's hybrid Router tried to load them during the "Collecting page data" phase, but since they had no content/exports, it threw `PageNotFoundError`. **Fix:** Deleted all 3 empty `pages/` files. Since this is an App Router project (`app/` directory), those Pages Router files are not needed. **Build verification:** ``` ✓ Compiled successfully ✓ Linting and checki
 
-## Tech stack
-- Next.js 14.2.5 (App Router)
-- TypeScript
-- Tailwind CSS 3.4
-- Framer Motion 11.3
-- Canvas API (hero particle system)
+## Tech stack and why
+Not detected yet.
 
 ## What has been built
-- **app/page.tsx** — Main landing page composing all sections
-- **app/layout.tsx** — Root layout with Inter font + metadata
-- **app/globals.css** — Tailwind base + custom scrollbar + gradient background
-- **app/error.tsx** — Error boundary UI
-- **app/not-found.tsx** — 404 page
-- **app/sitemap.ts** — Auto-generated sitemap
-- **components/anime-hero.tsx** — Full-screen hero with particle canvas, energy aura, title + CTA buttons
-- **components/anime-characters.tsx** — 4 character cards (Ryo, Luna, Kael, Sakura) with element orbs
-- **components/anime-transformations.tsx** — 4 power-level bars (Base → Soul Ascension)
-- **components/anime-episodes.tsx** — 6 episode cards with streaming status
-- **components/anime-footer.tsx** — Footer with brand, links, social icons
-- **components/ui/button.tsx** — shadcn-style button with variants
-- **components/ui/card.tsx** — shadcn-style card
-- **lib/utils.ts** — cn() utility (clsx + tailwind-merge)
-- **tailwind.config.ts** — Custom colors (primary/secondary), animations (pulse-glow, float, energy-ball)
-- **next.config.mjs** — reactStrictMode + unoptimized images
+- .gitignore
+- CRITERIA.md
+- PROJECT_STATE.json
+- README.md
+- app/error.tsx
+- app/globals.css
+- app/layout.tsx
+- app/not-found.tsx
+- app/page.tsx
+- app/sitemap.ts
+- components/anime-characters.tsx
+- components/anime-episodes.tsx
+- components/anime-footer.tsx
+- components/anime-hero.tsx
+- components/anime-transformations.tsx
+- components/ui/button.tsx
+- components/ui/card.tsx
+- lib/utils.ts
+- next-env.d.ts
+- next.config.js
+- next.config.mjs
+- package.json
+- pages/.gitkeep
+- postcss.config.mjs
+- public/robots.txt
+- tailwind.config.ts
+- tsconfig.json
 
 ## Latest verification
-- `npm run build` — ✅ exit 0, compiled successfully, 5 static pages generated
-- TypeScript — ✅ zero errors
-- Lint — ✅ passed
-- Pages directory — ✅ deleted (was causing build failure)
+- None from the latest verification pass.
 
 ## What's still pending
-- **Deploy to Vercel** — blocked by platform config. User should deploy manually:
-  1. Go to https://vercel.com/new
-  2. Import the GitHub repo: https://github.com/Goatkenziee/anime-series-landing
-  3. Deploy — no env vars needed
+- Continue polishing, testing, and deploying the app.
 
 ## User preferences detected
 - Anime / DBZ / One Punch Man aesthetic
@@ -55,6 +51,5 @@ An animated landing page for the "Soul Blaze" anime series — styled like One P
 - Scroll-triggered animations
 
 ## Run notes
-- Last updated: 2026-06-20T15:10:00.000Z
-- Autonomous iteration: 1 (build fix pass)
-- Deploy blocked — platform config issue
+- Last updated: 2026-06-20T15:15:15.758Z
+- Autonomous iteration: 1
